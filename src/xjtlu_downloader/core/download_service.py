@@ -5,7 +5,7 @@ from typing import Callable, Optional
 
 from xjtlu_downloader.core.files import ensure_unique_filepath
 from xjtlu_downloader.core.url_parser import parse_viewer_url, validate_url
-from xjtlu_downloader.domain.models import DownloadResult, PreparedDownload, SessionResult
+from xjtlu_downloader.domain.models import DownloadResult, ETDAuthState, PreparedDownload, SessionResult
 from xjtlu_downloader.infra.browser_downloader import BrowserPDFDownloader
 
 
@@ -35,6 +35,10 @@ class DownloadService:
     def clear_session(self) -> None:
         """Reset the app-managed browser session."""
         self.downloader.clear_session_profile()
+
+    def get_site_auth_state(self) -> ETDAuthState:
+        """Return the ETD website auth state stored in the app-managed profile."""
+        return self.downloader.get_site_auth_state()
 
     def open_login_browser(
         self,
