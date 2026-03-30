@@ -13,7 +13,7 @@ $ReleaseRoot = Join-Path $DistRoot "release"
 New-Item -ItemType Directory -Force -Path $DistRoot | Out-Null
 New-Item -ItemType Directory -Force -Path $ReleaseRoot | Out-Null
 
-& $PythonExe -m pip install -r (Join-Path $ProjectRoot "requirements.txt")
+& $PythonExe -m pip install -r (Join-Path $ProjectRoot "requirements.txt") pyinstaller
 & $PythonExe -m playwright install chromium
 
 $BrowserPath = & $PythonExe -m playwright install --dry-run chromium | Select-String "Install location:" | Select-Object -First 1

@@ -17,7 +17,7 @@ jobs:
           - os: windows-latest
             asset_name: XJTLU-PDF-Downloader-win-x64.zip
             build_command: powershell -ExecutionPolicy Bypass -File scripts/build_portable_win.ps1
-          - os: macos-13
+          - os: macos-15-intel
             asset_name: XJTLU-PDF-Downloader-macos-x64.zip
             build_command: bash scripts/build_portable_macos.sh XJTLU-PDF-Downloader-macos-x64.zip
           - os: macos-14

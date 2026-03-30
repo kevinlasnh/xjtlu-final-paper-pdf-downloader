@@ -10,7 +10,7 @@ ASSET_NAME="${1:-XJTLU-PDF-Downloader-macos.zip}"
 
 mkdir -p "$DIST_ROOT" "$RELEASE_ROOT"
 
-python3 -m pip install -r "$PROJECT_ROOT/requirements.txt"
+python3 -m pip install -r "$PROJECT_ROOT/requirements.txt" pyinstaller
 python3 -m playwright install chromium
 
 BROWSER_PATH="$(python3 -m playwright install --dry-run chromium | awk -F'Install location:[[:space:]]+' '/Install location:/ {print $2; exit}')"
