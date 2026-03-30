@@ -106,7 +106,7 @@ chmod +x install_mac.sh && ./install_mac.sh
 
 ### GitHub Release 便携包
 
-- 当前最新版本：[`v0.1.2`](https://github.com/kevinlasnh/XJTLU_Final_paper_PDF_downloader/releases/tag/v0.1.2)
+- 当前最新版本：[`v0.1.2`](https://github.com/kevinlasnh/xjtlu-final-paper-pdf-downloader/releases/tag/v0.1.2)
 - Windows: `XJTLU-PDF-Downloader-win-x64.zip`
 - macOS Intel: `XJTLU-PDF-Downloader-macos-x64.zip`
 - macOS Apple Silicon: `XJTLU-PDF-Downloader-macos-arm64.zip`
@@ -204,7 +204,7 @@ https://etd.xjtlu.edu.cn/static/readonline/web/viewer.html?file=%2Fapi%2Fv1%2FFi
 ## 项目结构
 
 ```
-XJTLU_Final_paper_PDF_downloader/
+ xjtlu-final-paper-pdf-downloader/
 ├── desktop_app.py       # 新桌面 GUI 启动入口
 ├── cli.py               # CLI 命令行程序
 ├── main.py              # 旧 Tkinter GUI，保留作兼容/对照，不再作为主线入口
@@ -252,7 +252,7 @@ XJTLU_Final_paper_PDF_downloader/
 如果遇到个别复杂问题导致程序无法正常运行，请：
 
 1. **查看错误提示**：程序会用中文详细说明问题原因和解决方案
-2. **GitHub Issue**：在[项目 Issues](https://github.com/kevinlasnh/XJTLU_Final_paper_PDF_downloader/issues)中留言描述问题
+2. **GitHub Issue**：在[项目 Issues](https://github.com/kevinlasnh/xjtlu-final-paper-pdf-downloader/issues)中留言描述问题
 3. **询问 Agent**：你也可以询问 Codex / Claude Code 协助排查
 
 遇到会话、403 或打开失败问题时，优先确认：
