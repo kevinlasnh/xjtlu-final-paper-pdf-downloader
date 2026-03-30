@@ -91,6 +91,8 @@ XJTLU ETD 系统只允许在线查看 PDF 试卷，**不提供直接下载功能
 - 便携发布：支持通过 GitHub Releases 下载 Windows / macOS 便携包
 - CLI 兼容：保留原有 CLI 和旧入口兼容层，方便逐步迁移
 
+> 当前“课程代码批量发现并加入下载队列”功能仅在桌面 GUI 中提供；CLI 版本仍然使用 viewer URL 作为输入。
+
 ## 快速开始
 
 ### Windows
@@ -175,6 +177,8 @@ python -m playwright install chromium
    - 日志面板会显示当前进度和失败原因
 
 ### CLI 命令行版本
+
+> CLI 当前仍以 viewer URL 为输入，不支持课程代码发现模式。
 
 **交互模式** (适合少量下载):
 ```bash
