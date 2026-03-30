@@ -24,6 +24,10 @@ export XJTLU_PLAYWRIGHT_BROWSERS="$(dirname "$BROWSER_PATH")"
 rm -rf "$PORTABLE_ROOT" "$BUILD_ROOT"
 python3 -m PyInstaller --noconfirm --clean "$PROJECT_ROOT/desktop_app.spec"
 
+BUNDLED_BROWSER_ROOT="$PROJECT_ROOT/dist/XJTLU_PDF_Downloader/ms-playwright"
+mkdir -p "$BUNDLED_BROWSER_ROOT"
+cp -R "$XJTLU_PLAYWRIGHT_BROWSERS/." "$BUNDLED_BROWSER_ROOT/"
+
 mkdir -p "$PORTABLE_ROOT"
 cp -R "$PROJECT_ROOT/dist/XJTLU_PDF_Downloader/." "$PORTABLE_ROOT/"
 

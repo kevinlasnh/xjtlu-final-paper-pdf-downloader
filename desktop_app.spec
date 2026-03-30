@@ -1,23 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from pathlib import Path
-import os
 
 
 project_root = Path.cwd()
 src_root = project_root / "src"
-browser_root = Path(os.environ.get("XJTLU_PLAYWRIGHT_BROWSERS", ""))
-
-datas = []
-if browser_root.exists():
-    datas.append((str(browser_root), "ms-playwright"))
 
 
 a = Analysis(
     ["desktop_app.py"],
     pathex=[str(project_root), str(src_root)],
     binaries=[],
-    datas=datas,
+    datas=[],
     hiddenimports=[
         "playwright.async_api",
         "PySide6.QtCore",

@@ -30,6 +30,10 @@ Remove-Item -Recurse -Force $BuildRoot -ErrorAction SilentlyContinue
 
 & $PythonExe -m PyInstaller --noconfirm --clean (Join-Path $ProjectRoot "desktop_app.spec")
 
+$BundledBrowserRoot = Join-Path $ProjectRoot "dist\\XJTLU_PDF_Downloader\\ms-playwright"
+New-Item -ItemType Directory -Force -Path $BundledBrowserRoot | Out-Null
+Copy-Item -Recurse -Force (Join-Path $BrowserRoot "*") $BundledBrowserRoot
+
 New-Item -ItemType Directory -Force -Path $PortableRoot | Out-Null
 Copy-Item -Recurse -Force (Join-Path $ProjectRoot "dist\\XJTLU_PDF_Downloader\\*") $PortableRoot
 
