@@ -1,8 +1,8 @@
-"""Domain models for parsing, tasks, and download results."""
+"""Domain models for parsing, search discovery, tasks, and download results."""
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from .enums import DownloadErrorCode
 
@@ -91,3 +91,45 @@ class SessionResult:
             "message": self.message,
             "profile_dir": str(self.profile_dir) if self.profile_dir else None,
         }
+
+
+@dataclass(frozen=True)
+class ETDAuthState:
+    """Login state extracted from the ETD site's local storage."""
+
+    token: str = ""
+    user_id: str = ""
+    user_name: str = ""
+    role: str = ""
+    issued_time: str = ""
+    expires_time: str = ""
+    error: Optional[str] = None
+
+    @property
+    def is_authenticated(self) -> bool:
+        """Return whether the ETD site token and user id are present."""
+        return bool(self.token and self.user_id)
+
+
+@dataclass(frozen=True)
+class CoursePaperHit:
+    """Single search hit returned by course-code discovery."""
+
+    course_code: str
+    record_id: str
+    paper_code: str = ""
+    paper_title: str = ""
+    year: str = ""
+    raw: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class DiscoveredViewerUrl:
+    """Resolved viewer URL plus metadata for a discovered paper."""
+
+    course_code: str
+    record_id: str
+    viewer_url: str
+    paper_code: str = ""
+    paper_title: str = ""
+    year: str = ""

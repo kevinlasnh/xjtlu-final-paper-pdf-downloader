@@ -11,13 +11,20 @@ from playwright.async_api import async_playwright
 
 from xjtlu_downloader.core.paths import get_browser_profile_dir
 from xjtlu_downloader.domain.enums import DownloadErrorCode
-from xjtlu_downloader.domain.models import BrowserConfig, DownloadResult, DownloadTask, SessionResult
+from xjtlu_downloader.domain.models import (
+    BrowserConfig,
+    DownloadResult,
+    DownloadTask,
+    ETDAuthState,
+    SessionResult,
+)
 
 
 class BrowserPDFDownloader:
     """Download PDFs by loading the viewer page in a real browser context."""
 
     ETD_HOME_URL = "https://etd.xjtlu.edu.cn/"
+    ETD_INDEX_URL = "https://etd.xjtlu.edu.cn/index.html#/index"
 
     def __init__(
         self,
@@ -47,6 +54,19 @@ class BrowserPDFDownloader:
             shutil.rmtree(profile_dir)
         profile_dir.mkdir(parents=True, exist_ok=True)
 
+    def get_site_auth_state(self) -> ETDAuthState:
+        """Read the ETD website's login token and user id from the app profile."""
+        loop = asyncio.new_event_loop()
+
+        try:
+            asyncio.set_event_loop(loop)
+            return loop.run_until_complete(self._get_site_auth_state_async())
+        except Exception as exc:
+            return ETDAuthState(error=f"读取 ETD 登录状态失败：{exc}")
+        finally:
+            asyncio.set_event_loop(None)
+            loop.close()
+
     async def _launch_context(self, playwright, headless: bool):
         """Launch a persistent browser context backed by the app profile."""
         profile_dir = self.get_user_data_dir()
@@ -63,6 +83,46 @@ class BrowserPDFDownloader:
             accept_downloads=True,
             args=["--disable-blink-features=AutomationControlled"],
         )
+
+    async def _get_site_auth_state_async(self) -> ETDAuthState:
+        """Async implementation used to inspect site auth state from local storage."""
+        playwright = None
+        context = None
+
+        try:
+            playwright = await async_playwright().start()
+            context = await self._launch_context(playwright, headless=True)
+            page = context.pages[0] if context.pages else await context.new_page()
+            page.set_default_timeout(self.config.timeout)
+            await page.goto(self.ETD_INDEX_URL, wait_until="domcontentloaded")
+            await page.wait_for_timeout(500)
+
+            storage = await page.evaluate(
+                """() => ({
+                    token: localStorage.getItem("token") || "",
+                    userId: localStorage.getItem("uId") || "",
+                    userName: localStorage.getItem("userName") || "",
+                    role: localStorage.getItem("role") || "",
+                    issuedTime: localStorage.getItem("issuedTime") || "",
+                    expiresTime: localStorage.getItem("expriesTime") || ""
+                })"""
+            )
+
+            return ETDAuthState(
+                token=storage.get("token", ""),
+                user_id=storage.get("userId", ""),
+                user_name=storage.get("userName", ""),
+                role=storage.get("role", ""),
+                issued_time=storage.get("issuedTime", ""),
+                expires_time=storage.get("expiresTime", ""),
+            )
+        except Exception as exc:
+            return ETDAuthState(error=f"读取 ETD 登录状态失败：{exc}")
+        finally:
+            if context:
+                await context.close()
+            if playwright:
+                await playwright.stop()
 
     def open_login_session(
         self,
